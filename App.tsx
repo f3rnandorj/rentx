@@ -1,4 +1,3 @@
-import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
 
 import theme from "./src/styles/theme";

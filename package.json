@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "react": "react-native start",
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@expo-google-fonts/archivo": "^0.2.3",
     "@expo-google-fonts/inter": "^0.2.3",
+    "@nozbe/watermelondb": "^0.25.5",
     "@react-native-masked-view/masked-view": "0.2.8",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/plugin-proposal-decorators": "^7.21.0",
     "@types/react": "~18.0.14",
     "@types/react-native": "^0.71.3",
     "@types/react-native-calendars": "^1.1264.3",
