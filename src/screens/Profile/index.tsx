@@ -3,8 +3,10 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Keyboard,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as Yup from "yup";
 
 import { Feather } from "@expo/vector-icons";
 import {
@@ -14,7 +16,11 @@ import {
 
 import { useTheme } from "styled-components";
 import { BackButton } from "../../components/BackButton";
+import { Button } from "../../components/Button";
 import { PasswordInput } from "../../components/PasswordInput";
+import { Input } from "../../components/Input";
+
+import { useAuth } from "../../hooks/auth";
 
 import { AppTabParamList } from "../../routes/app.tab.routes";
 import {
@@ -32,13 +38,11 @@ import {
   PhotoContainer,
   Section,
 } from "./styles";
-import { Input } from "../../components/Input";
-import { useAuth } from "../../hooks/auth";
 
 type ScreenProps = BottomTabScreenProps<AppTabParamList, "Profile">;
 
 export function Profile({ navigation }: ScreenProps) {
-  const { user, signOut } = useAuth();
+  const { user, signOut, updateUser } = useAuth();
 
   const [option, setOption] = useState<"dataEdit" | "passwordEdit">("dataEdit");
   const [avatar, setAvatar] = useState(user.avatar);
@@ -72,6 +76,53 @@ export function Profile({ navigation }: ScreenProps) {
     setOption(optionSelected);
   }
 
+  async function handleProfileUpdate() {
+    try {
+      const schema = Yup.object().shape({
+        driverLicense: Yup.string().required("CNH é obrigatória"),
+        name: Yup.string().required("Nomde é obrigatório"),
+      });
+
+      const data = { name, driverLicense };
+      await schema.validate(data);
+
+      await updateUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
+        name,
+        driver_license: driverLicense,
+        avatar,
+        token: user.token,
+      });
+
+      Alert.alert("Perfil atualizado!");
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        Alert.alert("Opa", error.message);
+      } else {
+        Alert.alert("Não foi possível atualizar o perfil");
+      }
+    }
+  }
+
+  async function handleSignOut() {
+    Alert.alert(
+      "Tem certeza que deseja sair?",
+      "Se sair, irá precisar de internet para conectar-se novamente",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => {},
+        },
+        {
+          text: "Confirmar",
+          onPress: () => signOut(),
+        },
+      ]
+    );
+  }
+
   return (
     <KeyboardAvoidingView behavior="position" enabled>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -80,7 +131,7 @@ export function Profile({ navigation }: ScreenProps) {
             <HeaderTop>
               <BackButton color={theme.colors.shape} onPress={handleBack} />
               <HeaderTitle>Editar Perfil</HeaderTitle>
-              <LogoutButton onPress={signOut}>
+              <LogoutButton onPress={handleSignOut}>
                 <Feather name="power" size={24} color={theme.colors.shape} />
               </LogoutButton>
             </HeaderTop>
@@ -132,12 +183,20 @@ export function Profile({ navigation }: ScreenProps) {
                   defaultValue={user.driver_license}
                   onChangeText={setDriverLicense}
                 />
+                <Button
+                  title="Salvar alterações"
+                  onPress={handleProfileUpdate}
+                />
               </Section>
             ) : (
               <Section style={{ marginBottom: useBottomTabBarHeight() }}>
                 <PasswordInput iconName="lock" placeholder="Senha atual" />
                 <PasswordInput iconName="lock" placeholder="Nova senha" />
                 <PasswordInput iconName="lock" placeholder="Repitir senha" />
+                <Button
+                  title="Salvar alterações"
+                  onPress={handleProfileUpdate}
+                />
               </Section>
             )}
           </Content>

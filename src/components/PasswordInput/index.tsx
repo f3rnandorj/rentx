@@ -8,7 +8,7 @@ import { TouchableOpacity } from "react-native";
 
 interface InputProps extends TextInputProps {
   iconName: React.ComponentProps<typeof Feather>["name"];
-  value: string;
+  value?: string;
 }
 
 export function PasswordInput({ iconName, value, ...rest }: InputProps) {

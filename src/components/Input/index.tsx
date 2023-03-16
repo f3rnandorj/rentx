@@ -7,7 +7,7 @@ import { TextInputProps } from "react-native";
 
 interface InputProps extends TextInputProps {
   iconName: React.ComponentProps<typeof Feather>["name"];
-  value: string;
+  value?: string;
 }
 
 export function Input({ iconName, value, ...rest }: InputProps) {
