@@ -48,6 +48,7 @@ export function PasswordInput({ iconName, value, ...rest }: InputProps) {
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         secureTextEntry={isPasswordVisible}
+        autoCorrect={false}
         {...rest}
       />
 

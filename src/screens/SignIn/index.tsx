@@ -14,7 +14,7 @@ import { useAuth } from "../../hooks/auth";
 import { Button } from "../../components/Button";
 import { useTheme } from "styled-components";
 import { Input } from "../../components/Input";
-import { PasswordInput } from "../../components/PasswordButton";
+import { PasswordInput } from "../../components/PasswordInput";
 
 import * as Yup from "yup";
 

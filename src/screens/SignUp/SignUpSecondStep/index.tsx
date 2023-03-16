@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AuthParamList } from "../../../routes/auth.routes";
 import { BackButton } from "../../../components/BackButton";
 import { Bullet } from "../../../components/Bullet";
-import { PasswordInput } from "../../../components/PasswordButton";
+import { PasswordInput } from "../../../components/PasswordInput";
 import { Button } from "../../../components/Button";
 
 import { api } from "../../../services/api";
