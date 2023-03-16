@@ -19,7 +19,6 @@ import { PasswordInput } from "../../components/PasswordButton";
 import * as Yup from "yup";
 
 import { Container, Footer, Form, Header, SubTitle, Title } from "./styles";
-import { database } from "../../database";
 
 type ScreenProps = NativeStackScreenProps<AuthParamList, "SignIn">;
 
@@ -57,15 +56,6 @@ export function SignIn({ navigation }: ScreenProps) {
   function handleNewAccount() {
     navigation.navigate("SignUpFirstStep");
   }
-
-  useEffect(() => {
-    async function loadData() {
-      const userCollection = database.get("users");
-      const users = await userCollection.query().fetch();
-    }
-
-    loadData();
-  }, []);
 
   return (
     <KeyboardAvoidingView behavior="position" enabled>
