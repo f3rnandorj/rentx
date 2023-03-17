@@ -37,8 +37,9 @@ export function Home({ navigation }: ScreenProps) {
         const response = await api.get(
           `cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`
         );
-
-        const { changes, latestVersion } = response.data;
+        const { changes, latestVersion } = await response.data;
+        console.log("### LOG ###");
+        console.log(response.data);
         return { changes, timestamp: latestVersion };
       },
       pushChanges: async ({ changes }) => {
@@ -49,27 +50,27 @@ export function Home({ navigation }: ScreenProps) {
   }
 
   useEffect(() => {
-    let isMounted = true;
+    // let isMounted = true;
     async function fetchCars() {
       try {
         const carCollection = database.get<ModelCar>("cars");
-        const cars = await carCollection.query().fetch();
-        if (isMounted) {
-          setCars(cars);
-        }
+        const car = await carCollection.query().fetch();
+        // if (isMounted) {
+        setCars(car);
+        // }
       } catch (error) {
         console.log(error);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        // if (isMounted) {
+        setLoading(false);
+        // }
       }
     }
 
     fetchCars();
-    return () => {
-      isMounted = false;
-    };
+    // return () => {
+    //   isMounted = false;
+    // };
   }, []);
 
   useEffect(() => {

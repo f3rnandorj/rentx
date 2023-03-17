@@ -6,9 +6,9 @@ import { AuthRoutes } from "./auth.routes";
 import { LoadAnimation } from "../components/LoadAnimation";
 
 export function Routes() {
-  const { user, loading } = useAuth();
+  const { user, isLogging } = useAuth();
 
-  return loading ? (
+  return isLogging ? (
     <LoadAnimation />
   ) : (
     <NavigationContainer>

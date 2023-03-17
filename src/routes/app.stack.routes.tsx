@@ -9,6 +9,7 @@ import { Confirmation } from "../screens/Confirmation";
 import { MyCars } from "../screens/MyCars";
 import { Car as ModelCar } from "../database/model/Car";
 import { ParamListBase } from "@react-navigation/native";
+import { CarDTO } from "../dtos/CarDTO";
 
 export interface AppStackParamList extends ParamListBase {
   Home: undefined;

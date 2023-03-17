@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import {
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  Keyboard,
-  Alert,
-} from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import * as Yup from "yup";
-
 import { Feather } from "@expo/vector-icons";
+import { useNetInfo } from "@react-native-community/netinfo";
 import {
   BottomTabScreenProps,
   useBottomTabBarHeight,
 } from "@react-navigation/bottom-tabs";
-
+import { useNavigation } from "@react-navigation/core";
+import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useTheme } from "styled-components";
+import * as Yup from "yup";
 import { BackButton } from "../../components/BackButton";
 import { Button } from "../../components/Button";
-import { PasswordInput } from "../../components/PasswordInput";
 import { Input } from "../../components/Input";
+import { PasswordInput } from "../../components/PasswordInput";
+import { AppTabParamList } from "../../routes/app.tab.routes";
 
 import { useAuth } from "../../hooks/auth";
-
-import { AppTabParamList } from "../../routes/app.tab.routes";
+import { api } from "../../services/api";
 import {
   Container,
   Content,
@@ -46,13 +46,26 @@ export function Profile({ navigation }: ScreenProps) {
 
   const [option, setOption] = useState<"dataEdit" | "passwordEdit">("dataEdit");
   const [avatar, setAvatar] = useState(user.avatar);
-  const [name, setName] = useState(user.avatar);
-  const [driverLicense, setDriverLicense] = useState(user.avatar);
+  const [name, setName] = useState(user.name);
+  const [driverLicense, setDriverLicense] = useState(user.driver_license);
+  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const netInfo = useNetInfo();
 
   const theme = useTheme();
 
   function handleBack() {
     navigation.goBack();
+  }
+
+  function handleOptionChange(optionSelected: "dataEdit" | "passwordEdit") {
+    if (netInfo.isConnected === false && optionSelected === "passwordEdit") {
+      Alert.alert("Para mudar a senha, conecte-se a Internet");
+    } else {
+      setOption(optionSelected);
+    }
   }
 
   async function handleAvatarSelect() {
@@ -62,6 +75,7 @@ export function Profile({ navigation }: ScreenProps) {
       aspect: [4, 4],
       quality: 1,
     });
+
     if (result.canceled) {
       return;
     }
@@ -69,10 +83,6 @@ export function Profile({ navigation }: ScreenProps) {
     if (result.assets) {
       setAvatar(result.assets[0].uri);
     }
-  }
-
-  function handleOptionChange(optionSelected: "dataEdit" | "passwordEdit") {
-    setOption(optionSelected);
   }
 
   async function handleProfileUpdate() {
@@ -85,11 +95,26 @@ export function Profile({ navigation }: ScreenProps) {
       const data = { name, driverLicense };
       await schema.validate(data);
 
+      if (password !== confirmPassword) {
+        return Alert.alert(
+          "A nova senha e a senha de confirmação não são iguais!"
+        );
+      }
+
+      if (password && oldPassword) {
+        api
+          .put("users", {
+            password,
+            old_password: oldPassword,
+          })
+          .catch((error) => console.log(error));
+      }
+
       await updateUser({
         id: user.id,
         user_id: user.user_id,
-        name,
         email: user.email,
+        name,
         driver_license: driverLicense,
         avatar,
         token: user.token,
@@ -100,11 +125,14 @@ export function Profile({ navigation }: ScreenProps) {
       if (error instanceof Yup.ValidationError) {
         Alert.alert("Opa", error.message);
       } else {
-        console.log(error);
         Alert.alert("Não foi possível atualizar o perfil");
       }
     }
   }
+
+  useEffect(() => {
+    setAvatar(user.avatar);
+  }, []);
 
   async function handleSignOut() {
     Alert.alert(
@@ -138,13 +166,14 @@ export function Profile({ navigation }: ScreenProps) {
 
             <PhotoContainer>
               {!!avatar && <Photo source={{ uri: avatar }} />}
+
               <PhotoButton onPress={handleAvatarSelect}>
                 <Feather name="camera" size={24} color={theme.colors.shape} />
               </PhotoButton>
             </PhotoContainer>
           </Header>
 
-          <Content>
+          <Content style={{ marginBottom: useBottomTabBarHeight() }}>
             <Options>
               <Option
                 active={option === "dataEdit"}
@@ -157,12 +186,12 @@ export function Profile({ navigation }: ScreenProps) {
                 onPress={() => handleOptionChange("passwordEdit")}
               >
                 <OptionTitle active={option === "passwordEdit"}>
-                  Trocar Senha
+                  Trocar senha
                 </OptionTitle>
               </Option>
             </Options>
             {option === "dataEdit" ? (
-              <Section style={{ marginBottom: useBottomTabBarHeight() }}>
+              <Section>
                 <Input
                   iconName="user"
                   placeholder="Nome"
@@ -173,7 +202,6 @@ export function Profile({ navigation }: ScreenProps) {
                 <Input
                   iconName="mail"
                   editable={false}
-                  autoCorrect={false}
                   defaultValue={user.email}
                 />
                 <Input
@@ -183,22 +211,28 @@ export function Profile({ navigation }: ScreenProps) {
                   defaultValue={user.driver_license}
                   onChangeText={setDriverLicense}
                 />
-                <Button
-                  title="Salvar alterações"
-                  onPress={handleProfileUpdate}
-                />
               </Section>
             ) : (
-              <Section style={{ marginBottom: useBottomTabBarHeight() }}>
-                <PasswordInput iconName="lock" placeholder="Senha atual" />
-                <PasswordInput iconName="lock" placeholder="Nova senha" />
-                <PasswordInput iconName="lock" placeholder="Repitir senha" />
-                <Button
-                  title="Salvar alterações"
-                  onPress={handleProfileUpdate}
+              <Section>
+                <PasswordInput
+                  iconName="lock"
+                  placeholder="Senha atual"
+                  onChangeText={setOldPassword}
+                />
+                <PasswordInput
+                  iconName="lock"
+                  placeholder="Nova senha"
+                  onChangeText={setPassword}
+                />
+                <PasswordInput
+                  iconName="lock"
+                  placeholder="Repetir senha"
+                  onChangeText={setConfirmPassword}
                 />
               </Section>
             )}
+
+            <Button title="Salvar alterações" onPress={handleProfileUpdate} />
           </Content>
         </Container>
       </TouchableWithoutFeedback>
