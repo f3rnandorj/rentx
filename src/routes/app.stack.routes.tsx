@@ -7,23 +7,23 @@ import { Scheduling } from "../screens/Scheduling";
 import { SchedulingDetails } from "../screens/SchedulingDetails";
 import { Confirmation } from "../screens/Confirmation";
 import { MyCars } from "../screens/MyCars";
-import { CarDTO } from "../dtos/CarDTO";
+import { Car as ModelCar } from "../database/model/Car";
 import { ParamListBase } from "@react-navigation/native";
 
 export interface AppStackParamList extends ParamListBase {
   Home: undefined;
   MyCars: undefined;
-  Scheduling: { car: CarDTO };
+  Scheduling: { car: ModelCar };
   Confirmation: {
     title: string;
     message: string;
     nextScreenRoute: string;
   };
   SchedulingDetails: {
-    car: CarDTO;
+    car: ModelCar;
     dates: string[];
   };
-  CarDetails: { car: CarDTO };
+  CarDetails: { car: ModelCar };
 }
 
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>();
