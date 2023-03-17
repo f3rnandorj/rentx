@@ -62,7 +62,6 @@ export function Profile({ navigation }: ScreenProps) {
       aspect: [4, 4],
       quality: 1,
     });
-    console.log(result);
     if (result.canceled) {
       return;
     }
@@ -80,7 +79,7 @@ export function Profile({ navigation }: ScreenProps) {
     try {
       const schema = Yup.object().shape({
         driverLicense: Yup.string().required("CNH é obrigatória"),
-        name: Yup.string().required("Nomde é obrigatório"),
+        name: Yup.string().required("Nome é obrigatório"),
       });
 
       const data = { name, driverLicense };
@@ -89,8 +88,8 @@ export function Profile({ navigation }: ScreenProps) {
       await updateUser({
         id: user.id,
         user_id: user.user_id,
-        email: user.email,
         name,
+        email: user.email,
         driver_license: driverLicense,
         avatar,
         token: user.token,
@@ -101,6 +100,7 @@ export function Profile({ navigation }: ScreenProps) {
       if (error instanceof Yup.ValidationError) {
         Alert.alert("Opa", error.message);
       } else {
+        console.log(error);
         Alert.alert("Não foi possível atualizar o perfil");
       }
     }
