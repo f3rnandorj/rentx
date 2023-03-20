@@ -14,14 +14,14 @@ import { CarDTO } from "../dtos/CarDTO";
 export interface AppStackParamList extends ParamListBase {
   Home: undefined;
   MyCars: undefined;
-  Scheduling: { car: ModelCar };
+  Scheduling: { car: CarDTO };
   Confirmation: {
     title: string;
     message: string;
     nextScreenRoute: string;
   };
   SchedulingDetails: {
-    car: ModelCar;
+    car: CarDTO;
     dates: string[];
   };
   CarDetails: { car: ModelCar };

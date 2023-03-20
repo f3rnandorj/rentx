@@ -38,8 +38,6 @@ export function Home({ navigation }: ScreenProps) {
           `cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`
         );
         const { changes, latestVersion } = await response.data;
-        console.log("### LOG ###");
-        console.log(response.data);
         return { changes, timestamp: latestVersion };
       },
       pushChanges: async ({ changes }) => {
