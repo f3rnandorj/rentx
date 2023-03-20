@@ -17,6 +17,7 @@ import { synchronize } from "@nozbe/watermelondb/sync";
 import { database } from "../../database";
 
 import { CarList, Container, Header, HeaderContent, TotalCars } from "./styles";
+import { CarDTO } from "../../dtos/CarDTO";
 
 type ScreenProps = NativeStackScreenProps<AppStackParamList, "Home">;
 
@@ -27,9 +28,8 @@ export function Home({ navigation }: ScreenProps) {
   const netInfo = useNetInfo();
 
   function handleCarDetails(carData: ModelCar) {
-    const car = carData._raw;
-    console.log(car);
-    navigation.navigate("CarDetails", { car } as any);
+    const car = carData._raw as unknown as CarDTO;
+    navigation.navigate("CarDetails", { car });
   }
 
   async function offlineSynchronize() {
