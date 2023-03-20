@@ -88,8 +88,6 @@ function AuthProvider({ children }: AuthProviderProps) {
         "Erro na atualização",
         "Não foi possível atualizar os dados do usuário!"
       );
-
-      console.log(error);
     }
   }
 
