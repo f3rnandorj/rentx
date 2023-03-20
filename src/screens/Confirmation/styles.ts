@@ -8,10 +8,9 @@ export const Container = styled.View`
 `;
 
 export const Content = styled.View`
-  flex: 1;
   justify-content: center;
   align-items: center;
-  padding-bottom: 110px;
+  padding-bottom: 130px;
 `;
 
 export const Title = styled.Text`
