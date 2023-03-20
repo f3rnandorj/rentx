@@ -50,27 +50,27 @@ export function Home({ navigation }: ScreenProps) {
   }
 
   useEffect(() => {
-    // let isMounted = true;
+    let isMounted = true;
     async function fetchCars() {
       try {
         const carCollection = database.get<ModelCar>("cars");
         const car = await carCollection.query().fetch();
-        // if (isMounted) {
-        setCars(car);
-        // }
+        if (isMounted) {
+          setCars(car);
+        }
       } catch (error) {
         console.log(error);
       } finally {
-        // if (isMounted) {
-        setLoading(false);
-        // }
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchCars();
-    // return () => {
-    //   isMounted = false;
-    // };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
