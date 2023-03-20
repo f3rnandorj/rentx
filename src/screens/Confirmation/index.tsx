@@ -6,7 +6,7 @@ import DoneSvg from "../../assets/done.svg";
 
 import { Container, Content, Footer, Message, Title } from "./styles";
 import { ConfirmButton } from "../../components/ConfirmButton";
-import { AppStackParamList } from "../../routes/stack.routes";
+import { AppStackParamList } from "../../routes/app.stack.routes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type ScreenProps = NativeStackScreenProps<AppStackParamList, "Confirmation">;

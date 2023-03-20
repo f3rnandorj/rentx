@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#1b1b1f"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -24,6 +26,11 @@
     },
     "packagerOpts": {
       "config": "metro.config.js"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ea997fea-17b1-4304-89c7-ceea193a3f24"
+      }
     }
   }
 }

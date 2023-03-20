@@ -14,17 +14,17 @@ import { CarDTO } from "../dtos/CarDTO";
 export interface AppStackParamList extends ParamListBase {
   Home: undefined;
   MyCars: undefined;
-  Scheduling: { car: CarDTO };
+  Scheduling: { car: CarDTO | ModelCar };
   Confirmation: {
     title: string;
     message: string;
     nextScreenRoute: string;
   };
   SchedulingDetails: {
-    car: CarDTO;
+    car: CarDTO | ModelCar;
     dates: string[];
   };
-  CarDetails: { car: ModelCar };
+  CarDetails: { car: CarDTO | ModelCar };
 }
 
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>();

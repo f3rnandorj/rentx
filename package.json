@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "react": "react-native start",
-    "start": "expo start --dev-client",
+    "start": "npx expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -23,6 +23,7 @@
     "date-fns": "^2.29.3",
     "expo": "~48.0.5",
     "expo-app-loading": "^2.1.1",
+    "expo-dev-client": "~2.1.5",
     "expo-font": "~11.1.1",
     "expo-image-picker": "~14.1.1",
     "expo-splash-screen": "~0.18.1",

@@ -26,8 +26,10 @@ export function Home({ navigation }: ScreenProps) {
 
   const netInfo = useNetInfo();
 
-  function handleCarDetails(car: ModelCar) {
-    navigation.navigate("CarDetails", { car });
+  function handleCarDetails(carData: ModelCar) {
+    const car = carData._raw;
+    console.log(car);
+    navigation.navigate("CarDetails", { car } as any);
   }
 
   async function offlineSynchronize() {
