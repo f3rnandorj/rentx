@@ -73,8 +73,8 @@ export function SchedulingDetails({ route, navigation }: ScreenProps) {
       .post("/rentals", {
         user_id: 1,
         car_id: car.id,
-        start_Date: new Date(dates[0]),
-        end_Date: new Date(dates[dates.length - 1]),
+        start_date: new Date(dates[0]),
+        end_date: new Date(dates[dates.length - 1]),
         total: rentTotal,
       })
       .then(() =>
@@ -87,6 +87,8 @@ export function SchedulingDetails({ route, navigation }: ScreenProps) {
       )
       .catch((error) => {
         setLoading(false);
+
+        console.log(new Date(dates[0]));
         console.log(error);
 
         Alert.alert("Não foi possível confirmar o agendamento.");
